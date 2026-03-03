@@ -1,0 +1,13 @@
+// Chat Service Prisma Schema
+// DB terpisah dari auth-service
+// userId disimpan sebagai String (reference ke auth service, bukan FK)
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

@@ -1,0 +1,27 @@
+model ChatRoom {
+  id        String   @id @default(uuid())
+  name      String? // Opsional untuk grup chat
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  messages     Message[]
+  participants ChatRoomParticipant[]
+
+  @@map("chat_rooms")
+}
+
+/// Junction table untuk participants.
+/// userId merujuk ke User di auth-service DB (bukan FK langsung).
+model ChatRoomParticipant {
+  id       String   @id @default(uuid())
+  roomId   String   @map("room_id")
+  /// ID user dari auth-service
+  userId   String   @map("user_id")
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([userId])
+  @@map("chat_room_participants")
+}

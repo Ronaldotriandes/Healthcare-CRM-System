@@ -1,0 +1,32 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+*.pem
+
+# Testing
+/coverage
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Prisma
+prisma/schema/migrations/*.sql

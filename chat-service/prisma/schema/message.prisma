@@ -1,0 +1,29 @@
+model Message {
+  id      String   @id @default(uuid())
+  content String   @db.Text
+  roomId  String   @map("room_id")
+
+  /// ID sender dari auth-service (bukan FK ke users table)
+  senderId String @map("sender_id")
+
+  // Attachment
+  attachmentUrl  String? @map("attachment_url")
+  attachmentType String? @map("attachment_type") // file | image | video
+  attachmentName String? @map("attachment_name")
+
+  /// Auto-increment untuk menjaga ordering per room
+  sequenceNumber BigInt @default(autoincrement()) @map("sequence_number")
+
+  /// Idempotency key untuk mencegah duplicate message
+  idempotencyKey String? @unique @map("idempotency_key")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  room ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  /// Index untuk query messages per room + pagination
+  @@index([roomId, createdAt(sort: Desc)])
+  @@index([roomId, sequenceNumber])
+  @@index([senderId])
+  @@map("messages")
+}
